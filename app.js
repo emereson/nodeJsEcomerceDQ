@@ -62,4 +62,12 @@ app.all('*', (req, res, next) => {
   );
 });
 
+app.use((err, req, res, next) => {
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({ error: err.message });
+  } else {
+    next(err);
+  }
+});
+
 export { app };

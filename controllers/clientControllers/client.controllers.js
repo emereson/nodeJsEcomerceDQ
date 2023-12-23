@@ -65,19 +65,12 @@ export const login = catchAsync(async (req, res, next) => {
   });
 
   if (!client) {
-    return next(
-      new AppError('El correo electrónico no se encuentra registrado.', 404)
-    );
+    return next(new AppError('Email no found', 404));
   }
 
   const passwordMatch = await bcrypt.compare(password, client.password);
   if (!passwordMatch) {
-    return next(
-      new AppError(
-        'La contraseña o el correo electrónico son incorrectos.',
-        401
-      )
-    );
+    return next(new AppError('Password incorrect', 401));
   }
 
   const token = await generateJWT(client.id);
