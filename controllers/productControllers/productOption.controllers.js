@@ -22,13 +22,14 @@ export const findOne = catchAsync(async (req, res) => {
 
 export const create = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { name, size, price } = req.body;
+  const { name, size, price, discount } = req.body;
 
   const productOption = await ProductOption.create({
     productId: id,
     name,
     size,
     price,
+    discount,
   });
 
   return res.status(200).json({
@@ -40,12 +41,13 @@ export const create = catchAsync(async (req, res) => {
 
 export const update = catchAsync(async (req, res) => {
   const { productOption } = req;
-  const { name, size, price } = req.body;
+  const { name, size, price, discount } = req.body;
 
   await productOption.update({
     name,
     size,
     price,
+    discount,
   });
 
   return res.status(200).json({

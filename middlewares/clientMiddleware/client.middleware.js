@@ -1,4 +1,6 @@
 import { Client } from '../../models/clientModels/client.model.js';
+import { ClientOrder } from '../../models/clientModels/clientOrder.model.js';
+import { Order } from '../../models/clientModels/order.model.js';
 import { AppError } from '../../utils/AppError.js';
 import { catchAsync } from '../../utils/catchAsync.js';
 
@@ -10,6 +12,13 @@ export const validExistClient = catchAsync(async (req, res, next) => {
       status: 'active',
       id,
     },
+    include: [
+      {
+        model: ClientOrder,
+        include: [Order],
+      },
+    ],
+    order: [[ClientOrder, 'createdAt', 'DESC']],
   });
 
   if (!client) {
@@ -17,5 +26,7 @@ export const validExistClient = catchAsync(async (req, res, next) => {
   }
 
   req.client = client;
+  req.ClientOrder = client.ClientOrder;
+  req.Order = ClientOrder.Order;
   next();
 });

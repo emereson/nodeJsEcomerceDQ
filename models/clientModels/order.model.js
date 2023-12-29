@@ -1,6 +1,5 @@
 import DataTypes from 'sequelize';
-import { db } from '../../database/config.js';
-
+import { db } from '../../config/database.config.js';
 const Order = db.define('order', {
   id: {
     primaryKey: true,

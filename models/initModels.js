@@ -1,3 +1,6 @@
+import { Client } from './clientModels/client.model.js';
+import { ClientOrder } from './clientModels/clientOrder.model.js';
+import { Order } from './clientModels/order.model.js';
 import { CategoryProduct } from './productModels/categoryProduct.model.js';
 import { Product } from './productModels/product.model.js';
 import { ProductExtra } from './productModels/productExtra.model.js';
@@ -16,6 +19,12 @@ const initModel = () => {
 
   Product.hasMany(ProductExtra, { foreignKey: 'productId' });
   ProductExtra.belongsTo(Product, { foreignKey: 'productId' });
+
+  Client.hasMany(ClientOrder, { foreignKey: 'clientId' });
+  ClientOrder.belongsTo(Client, { foreignKey: 'clientId' });
+
+  ClientOrder.hasMany(Order, { foreignKey: 'clientOrderId' });
+  Order.belongsTo(ClientOrder, { foreignKey: 'clientOrderId' });
 };
 
 export { initModel };

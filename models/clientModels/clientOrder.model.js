@@ -1,5 +1,5 @@
 import DataTypes from 'sequelize';
-import { db } from '../../database/config.js';
+import { db } from '../../config/database.config.js';
 
 const ClientOrder = db.define('clientOrder', {
   id: {
@@ -9,7 +9,7 @@ const ClientOrder = db.define('clientOrder', {
     type: DataTypes.INTEGER,
   },
   clientId: {
-    type: DataTypes.STRING,
+    type: DataTypes.UUID,
     allowNull: false,
   },
   date: {
@@ -18,6 +18,18 @@ const ClientOrder = db.define('clientOrder', {
   },
   hour: {
     type: DataTypes.STRING,
+    allowNull: false,
+  },
+  name: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  phoneNumber: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   address: {
@@ -32,7 +44,11 @@ const ClientOrder = db.define('clientOrder', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  delivery: {
+  deliveryName: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  deliveryPrice: {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
@@ -41,7 +57,7 @@ const ClientOrder = db.define('clientOrder', {
     allowNull: false,
   },
   statusOrder: {
-    type: DataTypes.ENUM('onTheWay', 'delivered'),
+    type: DataTypes.ENUM('onTheWay', 'delivered', 'cancel'),
     allowNull: false,
     defaultValue: 'onTheWay',
   },

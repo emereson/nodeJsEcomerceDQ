@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { app } from './app.js';
-import { db } from './database/config.js';
+import { db } from './config/database.config.js';
 import { initModel } from './models/initModels.js';
 
 const PORT = process.env.PORT || 3031;
@@ -11,7 +11,7 @@ db.authenticate()
     return initModel();
   })
   .then(() => {
-    return db.sync();
+    return db.sync({ force: true });
   })
   .then(() => {
     console.log(`Database Synced 💪`);

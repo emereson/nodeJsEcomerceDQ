@@ -1,4 +1,4 @@
-import { db } from '../../database/config.js';
+import { db } from '../../config/database.config.js';
 import { Sequelize, DataTypes } from 'sequelize';
 
 const Client = db.define('client', {

@@ -28,7 +28,7 @@ export const findOne = catchAsync(async (req, res) => {
 
 export const create = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { name, description } = req.body;
+  const { name, description, label, labelColor } = req.body;
 
   const imgRef = ref(
     storage,
@@ -43,6 +43,8 @@ export const create = catchAsync(async (req, res) => {
     categoryProductId: id,
     name,
     description,
+    label,
+    labelColor,
     productImg: imgUploaded,
   });
 
@@ -55,11 +57,13 @@ export const create = catchAsync(async (req, res) => {
 
 export const update = catchAsync(async (req, res) => {
   const { product } = req;
-  const { name, description } = req.body;
+  const { name, description, label, labelColor } = req.body;
 
   await product.update({
     name,
     description,
+    label,
+    labelColor,
   });
 
   return res.status(200).json({

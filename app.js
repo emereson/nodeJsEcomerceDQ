@@ -9,6 +9,7 @@ import xss from 'xss-clean';
 import { AppError } from './utils/AppError.js';
 
 import { usersRouter } from './routes/user.routes.js';
+import { ordersRouter } from './routes/Orders.routes.js';
 // client import
 import { clientRouter } from './routes/clientRoutes/client.routes.js';
 import { clientOrderRouter } from './routes/clientRoutes/clientOrder.routes.js';
@@ -21,11 +22,17 @@ import { productRouter } from './routes/productRoutes/product.routes.js';
 import { productOptionRouter } from './routes/productRoutes/productOption.routes.js';
 import { productExtraRouter } from './routes/productRoutes/productExtra.routes.js';
 
+//delivery
+import { deliveryRouter } from './routes/delivery.routes.js';
+
+//izipay
+import { iziPayRouter } from './routes/iziPay.routes.js';
+
 const app = express();
 
 app.set('trust proxy', 1);
 const limiter = rateLimit({
-  max: 3000,
+  max: 10000,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in one hour.',
 });
@@ -45,6 +52,7 @@ app.use(
 app.use(hpp());
 app.use('/api/v1', limiter);
 app.use('/api/v1/user', usersRouter);
+app.use('/api/v1/orders', ordersRouter);
 // client rotues
 app.use('/api/v1/client', clientRouter);
 app.use('/api/v1/client-order', clientOrderRouter);
@@ -55,6 +63,10 @@ app.use('/api/v1/category-product', categoryProductRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/product-option', productOptionRouter);
 app.use('/api/v1/product-extra', productExtraRouter);
+//delivery
+app.use('/api/v1/delivery', deliveryRouter);
+//izipay
+app.use('/api/v1/izipay', iziPayRouter);
 
 app.all('*', (req, res, next) => {
   return next(

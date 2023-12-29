@@ -84,14 +84,12 @@ export const login = catchAsync(async (req, res, next) => {
 
 export const update = catchAsync(async (req, res) => {
   const { client } = req;
-  const { name, lastName, dni, email, phoneNumber, address } = req.body;
+  const { name, lastName, phoneNumber, address } = req.body;
 
   await client.update({
     name,
     lastName,
-    dni,
-    email,
-    phoneNumber,
+    phoneNumber: Number(phoneNumber),
     address,
   });
 

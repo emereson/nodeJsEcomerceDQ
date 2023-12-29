@@ -1,5 +1,5 @@
 import DataTypes from 'sequelize';
-import { db } from '../../database/config.js';
+import { db } from '../../config/database.config.js';
 
 const Product = db.define('product', {
   id: {
@@ -17,6 +17,14 @@ const Product = db.define('product', {
     allowNull: false,
   },
   description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  label: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  labelColor: {
     type: DataTypes.STRING,
     allowNull: false,
   },

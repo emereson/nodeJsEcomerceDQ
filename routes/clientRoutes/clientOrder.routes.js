@@ -7,8 +7,10 @@ import * as clientOrderMiddleware from '../../middlewares/clientMiddleware/clien
 
 const router = express.Router();
 
-router.get('/', clientOrderController.findAll);
 router.use(clientAuthMiddleware.protect);
+
+router.get('/', clientOrderController.findAll);
+router.get('/oneClient/:id', clientOrderController.findAllOneClient);
 
 router
   .route('/:id')
