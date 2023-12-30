@@ -23,14 +23,13 @@ export const findAllOneClient = catchAsync(async (req, res) => {
 
   // Verificar si 'page' es un número válido
   const pageNumber = parseInt(page, 10);
-
   const offset = (pageNumber - 1) * itemsPerPage;
 
   const totalCount = await ClientOrder.count({
     where: { status: 'active', clientId: id },
   });
 
-  const totalPages = Math.ceil(totalCount / itemsPerPage);
+  const totalPages = await Math.ceil(totalCount / itemsPerPage);
 
   const clientOrders = await ClientOrder.findAll({
     where: { status: 'active', clientId: id },
@@ -102,7 +101,7 @@ export const create = catchAsync(async (req, res) => {
     await Order.create({
       clientOrderId: clientOrder.id,
       name: product.dataProduct.name,
-      option: `${product.selectOption.name}:${product.selectOption.size}`,
+      option: `${product.selectOption.name} ${product.selectOption.size}`,
       extras: product.selectExtra,
       numberOrder: product.counter,
       unitPrice: product.price,

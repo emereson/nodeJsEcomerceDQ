@@ -12,6 +12,7 @@ router.use(userAuthMiddleware.protect);
 
 router.get('/', OrderController.findAll);
 router.get('/clients', OrderController.findAllClient);
+router.get('/oneClient/:id', clientOrderController.findAllOneClient);
 
 router
   .route('/:id')
