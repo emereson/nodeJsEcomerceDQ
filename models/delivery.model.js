@@ -24,11 +24,6 @@ const Delivery = db.define('delivery', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  status: {
-    type: DataTypes.ENUM('active', 'disabled'),
-    allowNull: false,
-    defaultValue: 'active',
-  },
 });
 
 export { Delivery };

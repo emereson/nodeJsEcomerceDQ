@@ -28,7 +28,7 @@ export const findOne = catchAsync(async (req, res) => {
 });
 
 export const signup = catchAsync(async (req, res) => {
-  const { name, lastName, dni, email, phoneNumber, address, password } =
+  const { name, lastName, dni, email, date, phoneNumber, address, password } =
     req.body;
 
   const salt = await bcrypt.genSalt(12);
@@ -40,6 +40,7 @@ export const signup = catchAsync(async (req, res) => {
     dni,
     email,
     phoneNumber,
+    date,
     address,
     password: encryptedPassword,
   });

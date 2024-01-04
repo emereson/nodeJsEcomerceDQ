@@ -34,6 +34,10 @@ const Client = db.define('client', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  date: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   clientImg: {
     type: DataTypes.TEXT,
     allowNull: true,
