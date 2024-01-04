@@ -33,7 +33,7 @@ const User = db.define('user', {
     type: DataTypes.TEXT,
     allowNull: true,
     defaultValue:
-      'https://nftcalendar.io/storage/uploads/2022/03/14/chefpizza_03142022215931622fbac32a3ff.jpg',
+      'https://scontent.fjul2-1.fna.fbcdn.net/v/t39.30808-6/305799816_456493173195615_6583435227315987968_n.png?_nc_cat=101&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=lLqqh1J-JKQAX-uHKPK&_nc_ht=scontent.fjul2-1.fna&oh=00_AfB37s6e4wOXYejZJnh0BdopZUzTvckKGtb6qu6XtxC1rw&oe=659C6765',
   },
   password: {
     type: DataTypes.STRING,
