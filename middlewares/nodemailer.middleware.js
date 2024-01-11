@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: 'smtpout.secureserver.net',
+  host: process.env.HOSTEMAIL,
   port: 465, // Puerto de SMTP
   secure: true,
   auth: {
