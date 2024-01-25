@@ -69,9 +69,7 @@ app.use('/api/v1/delivery', deliveryRouter);
 app.use('/api/v1/izipay', iziPayRouter);
 
 app.all('*', (req, res, next) => {
-  return next(
-    new AppError(`Can't find ${req.originalUrl} on this server! 💀`, 404)
-  );
+  return next(new AppError(`Can't find ${req.originalUrl} on this server! 💀`, 404));
 });
 
 app.use((err, req, res, next) => {

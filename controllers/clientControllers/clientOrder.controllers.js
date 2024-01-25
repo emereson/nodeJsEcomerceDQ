@@ -60,25 +60,21 @@ export const findOne = catchAsync(async (req, res) => {
 export const create = catchAsync(async (userId, dataPay) => {
   const { products, dataClient, delivery, totalPrice } = await dataPay;
 
-  const currentDateTimeInPeruTimeZone = new Date();
+  const peruTimeZone = 'America/Lima'; // Zona horaria de Perú
 
-  const options = {
+  const formattedDate = new Date().toLocaleDateString('es-PE', {
+    timeZone: peruTimeZone,
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  };
+  });
 
-  const formattedDate = currentDateTimeInPeruTimeZone
-    .toLocaleDateString('es-PE', options)
-    .replace(/\//g, '-'); // Reemplazar barras con guiones
-
-  const formattedTime = currentDateTimeInPeruTimeZone.toLocaleTimeString(
-    'es-PE',
-    {
-      hour: '2-digit',
-      minute: '2-digit',
-    }
-  );
+  const formattedTime = new Date().toLocaleTimeString('es-PE', {
+    timeZone: peruTimeZone,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
 
   const clientOrder = await ClientOrder.create({
     clientId: userId,
