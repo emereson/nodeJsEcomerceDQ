@@ -5,7 +5,7 @@ import { catchAsync } from '../utils/catchAsync.js';
 import { create } from './clientControllers/clientOrder.controllers.js';
 
 const username = process.env.ID_TIENDA;
-const password = process.env.ID_TIENDA;
+const password = process.env.IZIPAY_PASSWORD;
 const publicKey = process.env.IZIPAY_PUBLIC_KEY;
 const hmac256 = process.env.CLAVE_HMAC_SHA_256;
 
@@ -35,6 +35,7 @@ export const createFormToken = catchAsync(async (req, res) => {
 
   try {
     const { data } = await axios.request(options);
+    console.log(data);
     return res.status(200).json(data.answer.formToken); // Devuelve la respuesta como JSON
   } catch (error) {
     console.error(error);
