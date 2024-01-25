@@ -4,13 +4,13 @@ import Hex from 'crypto-js/enc-hex.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { create } from './clientControllers/clientOrder.controllers.js';
 
+const username = process.env.ID_TIENDA;
+const password = process.env.ID_TIENDA;
+const publicKey = process.env.IZIPAY_PUBLIC_KEY;
+const hmac256 = process.env.CLAVE_HMAC_SHA_256;
+
 export const createFormToken = catchAsync(async (req, res) => {
   const dataPay = req.body;
-
-  const username = '14730041';
-
-  // format: testprivatekey_XXXXXXX
-  const password = 'testpassword_8tPpklmw0jRjT6p8xwZZhQrzJIcuCVrMwVVlMJWnejdHD';
 
   // format: api.my.psp.domain.name without https
   const endpoint = 'api.micuentaweb.pe';
@@ -19,8 +19,7 @@ export const createFormToken = catchAsync(async (req, res) => {
     method: 'POST',
     url: `https://${username}:${password}@${endpoint}/api-payment/V4/Charge/CreatePayment`,
     headers: {
-      Authorization:
-        '78651207:testpublickey_CzixtA11eW23woh0DYE9f2CnfloSyBL0B6sGLU7aaAYyv',
+      Authorization: publicKey,
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
@@ -49,12 +48,7 @@ export const validPayments = catchAsync(async (req, res) => {
   const userData = req.body.userData;
   const answer = req.body.paymentData.clientAnswer;
   const hash = req.body.paymentData.hash;
-  const answerHash = Hex.stringify(
-    hmacSHA256(
-      JSON.stringify(answer),
-      'JRXKliEcXvbfksOOVZexX5DsIPDfwCpmiFJHtz8dvojBX'
-    )
-  );
+  const answerHash = Hex.stringify(hmacSHA256(JSON.stringify(answer), hmac256));
 
   if (hash === answerHash) {
     create(userData.id, dataPay);
