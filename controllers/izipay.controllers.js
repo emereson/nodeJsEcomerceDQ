@@ -35,7 +35,6 @@ export const createFormToken = catchAsync(async (req, res) => {
 
   try {
     const { data } = await axios.request(options);
-    console.log(data);
     return res.status(200).json(data.answer.formToken); // Devuelve la respuesta como JSON
   } catch (error) {
     console.error(error);
