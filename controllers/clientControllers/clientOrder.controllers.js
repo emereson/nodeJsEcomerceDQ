@@ -57,9 +57,8 @@ export const findOne = catchAsync(async (req, res) => {
   });
 });
 
-export const create = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const { products, dataClient, delivery, totalPrice } = await req.body;
+export const create = catchAsync(async (userId, dataPay) => {
+  const { products, dataClient, delivery, totalPrice } = await dataPay;
 
   const currentDateTimeInPeruTimeZone = new Date();
 
@@ -82,7 +81,7 @@ export const create = catchAsync(async (req, res) => {
   );
 
   const clientOrder = await ClientOrder.create({
-    clientId: id,
+    clientId: userId,
     date: formattedDate,
     hour: formattedTime,
     name: dataClient?.name,
@@ -119,16 +118,11 @@ export const create = catchAsync(async (req, res) => {
     });
   });
 
-  const createdOrders = await Promise.all(orderPromises);
+  await Promise.all(orderPromises);
 
   sendConfirmationEmail(products, dataClient, delivery, totalPrice);
 
-  return res.status(200).json({
-    status: 'success',
-    message: 'The clientOrder has been created',
-    clientOrder,
-    orders: createdOrders,
-  });
+  console.log('orden creada ');
 });
 
 export const update = catchAsync(async (req, res) => {

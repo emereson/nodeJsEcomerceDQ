@@ -1,64 +1,65 @@
-import { checkHash, createFormToken } from '../utils/IziPay.js';
+import axios from 'axios';
+import hmacSHA256 from 'crypto-js/hmac-sha256.js';
+import Hex from 'crypto-js/enc-hex.js';
+import { catchAsync } from '../utils/catchAsync.js';
+import { create } from './clientControllers/clientOrder.controllers.js';
 
-export const createPayment = async (req, res) => {
-  const {} = req.body;
-  const paymentConf = {
-    amount: 10 * 100,
-    currency: 'PEN',
-    customer: {
-      reference: 'clienteId-12345',
-      email: 'example@gmail.com',
+export const createFormToken = catchAsync(async (req, res) => {
+  const dataPay = req.body;
+
+  const username = '14730041';
+
+  // format: testprivatekey_XXXXXXX
+  const password = 'testpassword_8tPpklmw0jRjT6p8xwZZhQrzJIcuCVrMwVVlMJWnejdHD';
+
+  // format: api.my.psp.domain.name without https
+  const endpoint = 'api.micuentaweb.pe';
+
+  const options = {
+    method: 'POST',
+    url: `https://${username}:${password}@${endpoint}/api-payment/V4/Charge/CreatePayment`,
+    headers: {
+      Authorization:
+        '78651207:testpublickey_CzixtA11eW23woh0DYE9f2CnfloSyBL0B6sGLU7aaAYyv',
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
     },
-    orderId: `order-${new Date().getTime()}`,
+    data: {
+      amount: Number(dataPay.totalPrice) * 100,
+      currency: 'PEN',
+      orderId: 'myOrderId-999999',
+      customer: {
+        email: 'sample@example.com',
+      },
+    },
   };
+
   try {
-    const response = await createFormToken(paymentConf);
-    if (response.status !== 'SUCCESS') return res.status(400).json(response);
-    else res.status(200).json(response.answer);
+    const { data } = await axios.request(options);
+    return res.status(200).json(data.answer.formToken); // Devuelve la respuesta como JSON
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+    // Puedes elegir manejar el error de manera específica según tus necesidades
   }
-};
+});
 
-export const validatePayment = (req, res) => {
-  const { clientAnswer, hash, hashKey } = req.body;
+export const validPayments = catchAsync(async (req, res) => {
+  const dataPay = req.body.dataPay;
+  const userData = req.body.userData;
+  const answer = req.body.paymentData.clientAnswer;
+  const hash = req.body.paymentData.hash;
+  const answerHash = Hex.stringify(
+    hmacSHA256(
+      JSON.stringify(answer),
+      'JRXKliEcXvbfksOOVZexX5DsIPDfwCpmiFJHtz8dvojBX'
+    )
+  );
 
-  if (!checkHash(clientAnswer, hash, hashKey))
-    return res.status(400).json({ result: 'Payment hash mismatch!' });
-  res.status(200).json({ result: 'Payment Success!' });
-};
-
-export const notificationIPN = (req, res) => {
-  const paymentDataIPN = req.body;
-  console.log('IPN:', paymentDataIPN);
-  /* Retrieve the IPN content */
-  const formAnswer = paymentDataIPN['kr-answer'];
-  const hash = paymentDataIPN['kr-hash'];
-  const hashKey = paymentDataIPN['kr-hash-key'];
-
-  /* Check the signature using password */
-  if (!checkHash(formAnswer, hash, hashKey)) {
-    return res.status(400).send('Payment hash mismatch!');
+  if (hash === answerHash) {
+    create(userData.id, dataPay);
+    res.status(200).send('Valid payment');
+  } else {
+    res.status(500).send('Payment hash mismatch');
   }
-
-  /* Retrieve the transaction id from the IPN data */
-  const transaction = formAnswer.transactions[0];
-
-  /* get some parameters from the answer */
-  const orderStatus = formAnswer.orderStatus;
-  const orderId = formAnswer.orderDetails.orderId;
-  const transactionUUID = transaction.uuid;
-
-  if (orderStatus === 'PAID') {
-    /* I update my database if needed */
-    /* Add here your custom code */
-  }
-
-  /**
-   * Message returned to the IPN caller
-   * You can return want you want but
-   * HTTP response code should be 200
-   */
-  res.status(200).send(`OK! OrderStatus is ${orderStatus}`);
-};
+});

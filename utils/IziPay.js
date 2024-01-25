@@ -1,31 +1,26 @@
-import axios from 'axios';
-// const Hex = require('crypto-js/enc-hex');
-// const hmacSHA256 = require('crypto-js/hmac-sha256');
-import { config } from '../config/iziPay.config.js';
+const axios = require('axios').default;
 
-const { ID_TIENDA, PASSWORD, CLAVE_HMAC_SHA_256 } = config();
+exports.createFormToken = async (paymentConf) => {
+  // format: 123456789
+  const username = '78651207';
 
-const createFormToken = async (paymentConf) => {
-  const createPaymentEndPoint = `https://${ID_TIENDA}:${PASSWORD}@api.micuentaweb.pe/api-payment/V4/Charge/CreatePayment`;
+  // format: testprivatekey_XXXXXXX
+  const password = 'testpassword_eeefjdtuNq9w15Fpp03YSmJuNbYvRzP3DSjvcZ5IiOFdg';
+
+  // format: api.my.psp.domain.name without https
+  const endpoint = 'noderolex-production.up.railway.app/api/v1';
+
+  const createPaymentEndpoint = `https://${username}:${password}@${endpoint}/api-payment/V4/Charge/CreatePayment`;
+
   try {
-    const response = await axios.post(createPaymentEndPoint, paymentConf, {
-      headers: { 'Content-Type': 'application/json' },
+    const response = await axios.post(createPaymentEndpoint, paymentConf, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    return response.data;
+    if (!response?.data?.answer?.formToken) throw response;
+    return response.data.answer.formToken;
   } catch (error) {
     throw error;
   }
 };
-
-const checkHash = (answer, hash, hashKey) => {
-  let key = '';
-  if (hashKey === 'sha256_hmac') {
-    key = CLAVE_HMAC_SHA_256;
-  } else if (hashKey === 'password') {
-    key = PASSWORD;
-  }
-  //   const answerHash = Hex.stringify(hmacSHA256(JSON.stringify(answer), key));
-  return hash === answerHash;
-};
-
-export { createFormToken, checkHash };

@@ -41,8 +41,7 @@ const Client = db.define('client', {
   clientImg: {
     type: DataTypes.TEXT,
     allowNull: true,
-    defaultValue:
-      'https://i.seadn.io/gae/wVcjyNPoWwuVlQ5eH8acOVp58okFD1fEG5AgMLQD2TVmfZ30lpnwwNn5Db9HggFKBWCKw8ldCwiWIWEGToiXe_0ssEN3iniO5WoO?auto=format&dpr=1&w=1920',
+    defaultValue: 'https://admin.donquezo.com/perfil.png',
   },
   password: {
     type: DataTypes.STRING,
