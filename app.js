@@ -3,8 +3,10 @@ import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 import hpp from 'hpp';
+import http from 'http';
 import rateLimit from 'express-rate-limit';
 import xss from 'xss-clean';
+import { Server } from 'socket.io';
 
 import { AppError } from './utils/AppError.js';
 
@@ -49,7 +51,21 @@ app.use(
     crossOriginResourcePolicy: false,
   })
 );
+const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+  },
+});
+
 app.use(hpp());
+app.set('io', io);
+
+io.on('connection', (socket) => {
+  console.log(socket.id);
+  console.log('a user connected');
+});
 app.use('/api/v1', limiter);
 app.use('/api/v1/user', usersRouter);
 app.use('/api/v1/orders', ordersRouter);
