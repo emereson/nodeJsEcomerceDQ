@@ -3,6 +3,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 import hpp from 'hpp';
+import http from 'http'; // Importa el módulo http
+import { Server as SocketServer } from 'socket.io';
 
 import rateLimit from 'express-rate-limit';
 import xss from 'xss-clean';
@@ -41,6 +43,15 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+const server = http.createServer(app);
+
+const io = new SocketServer(server, {
+  path: '/socket.io',
+  cors: {
+    origin: '*',
+  },
+});
+
 app.use(express.json());
 app.use(cors());
 app.use(xss());
@@ -51,7 +62,10 @@ app.use(
 );
 
 app.use(hpp());
-
+app.set('io', io);
+io.on('connection', (socket) => {
+  console.log(`WebSocket connected: ${socket.id}`);
+});
 app.use('/api/v1', limiter);
 app.use('/api/v1/user', usersRouter);
 app.use('/api/v1/orders', ordersRouter);
@@ -82,4 +96,4 @@ app.use((err, req, res, next) => {
   }
 });
 
-export { app };
+export { app, server };

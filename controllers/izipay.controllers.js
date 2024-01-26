@@ -45,8 +45,8 @@ export const createFormToken = catchAsync(async (req, res) => {
 
 export const validPayments = catchAsync(async (req, res) => {
   const dataPay = req.body.dataPay;
-  const userData = req.body.userData;
   const io = req.app.get('io');
+  const userData = req.body.userData;
   const answer = req.body.paymentData.clientAnswer;
   const hash = req.body.paymentData.hash;
   const answerHash = Hex.stringify(hmacSHA256(JSON.stringify(answer), hmac256));
