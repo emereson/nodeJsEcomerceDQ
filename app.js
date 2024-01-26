@@ -48,7 +48,7 @@ const server = http.createServer(app);
 const io = new SocketServer(server, {
   path: '/socket.io',
   cors: {
-    origin: 'https://nodejsecomercedq-production-c9c0.up.railway.app',
+    origin: 'https://admin.donquezo.com',
   },
 });
 
