@@ -17,16 +17,16 @@ db.authenticate()
   })
   .then(() => {
     console.log(`Database Synced 💪`);
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`App Running on Port ${PORT}`);
     });
   })
-  .then(() => {
-    console.log(`Database Synced 💪`);
-    server.listen(PORT2, () => {
-      console.log(`Socket io Running on Port ${PORT2}`);
-    });
-  })
+  // .then(() => {
+  //   console.log(`Database Synced 💪`);
+  //   server.listen(PORT2, () => {
+  //     console.log(`Socket io Running on Port ${PORT2}`);
+  //   });
+  // })
   .catch((err) => {
     console.error('Error connecting to the database:', err);
   });
