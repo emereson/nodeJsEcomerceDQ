@@ -53,8 +53,8 @@ export const validPayments = catchAsync(async (req, res) => {
 
   if (hash === answerHash) {
     create(userData.id, dataPay);
-    io.emit('validPay', { data: 'approved' });
     res.status(200).send('Valid payment');
+    io.emit('validPay', { data: 'approved' });
   } else {
     res.status(500).send('Payment hash mismatch');
   }
