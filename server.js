@@ -17,7 +17,7 @@ db.authenticate()
   })
   .then(() => {
     console.log(`Database Synced 💪`);
-    server.listen(PORT, () => {
+    app.listen(PORT, () => {
       console.log(`App Running on Port ${PORT}`);
     });
   })
