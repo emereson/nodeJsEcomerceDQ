@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { app } from './app.js';
+import { app, server } from './app.js';
 import { db } from './config/database.config.js';
 import { initModel } from './models/initModels.js';
 
@@ -15,7 +15,7 @@ db.authenticate()
   })
   .then(() => {
     console.log(`Database Synced 💪`);
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`App Running on Port ${PORT}`);
     });
   })
