@@ -3,10 +3,9 @@ import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import http from 'http';
+
 import rateLimit from 'express-rate-limit';
 import xss from 'xss-clean';
-import { Server as SocketServer } from 'socket.io'; // Usa la importación correcta
 import { AppError } from './utils/AppError.js';
 
 import { usersRouter } from './routes/user.routes.js';
@@ -28,7 +27,6 @@ import { deliveryRouter } from './routes/delivery.routes.js';
 
 //izipay
 import { iziPayRouter } from './routes/iziPay.routes.js';
-import { globalErrorHandler } from './controllers/error.controller.js';
 
 const app = express();
 
@@ -43,14 +41,6 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-const server = http.createServer(app);
-
-const io = new SocketServer(server, {
-  cors: {
-    origin: '*',
-  },
-});
-
 app.use(express.json());
 app.use(cors());
 app.use(xss());
@@ -61,12 +51,7 @@ app.use(
 );
 
 app.use(hpp());
-app.set('io', io);
 
-io.on('connection', (socket) => {
-  console.log(socket.id);
-  console.log('a user connected');
-});
 app.use('/api/v1', limiter);
 app.use('/api/v1/user', usersRouter);
 app.use('/api/v1/orders', ordersRouter);
@@ -97,6 +82,4 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.use(globalErrorHandler);
-
-export { app, server };
+export { app };
