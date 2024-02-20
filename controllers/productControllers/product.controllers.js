@@ -4,10 +4,12 @@ import { catchAsync } from '../../utils/catchAsync.js';
 import { storage } from '../../utils/firebase.js';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Product } from '../../models/productModels/product.model.js';
+import { ProductPizza } from '../../models/productModels/productPizza.model.js';
+import { ProductDrink } from '../../models/productModels/productDrink.model.js';
 
 export const findAll = catchAsync(async (req, res) => {
   const products = await Product.findAll({
-    include: [ProductExtra, ProductOption],
+    include: [ProductExtra, ProductOption, ProductPizza, ProductDrink],
   });
 
   return res.status(200).json({
@@ -30,10 +32,7 @@ export const create = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { name, description, label, labelColor } = req.body;
 
-  const imgRef = ref(
-    storage,
-    `productImg/${Date.now()}-${req.file.originalname}`
-  );
+  const imgRef = ref(storage, `productImg/${Date.now()}-${req.file.originalname}`);
 
   await uploadBytes(imgRef, req.file.buffer);
 
@@ -76,10 +75,7 @@ export const update = catchAsync(async (req, res) => {
 export const updateImg = catchAsync(async (req, res) => {
   const { product } = req;
 
-  const imgRef = ref(
-    storage,
-    `productImg/${Date.now()}-${req.file.originalname}`
-  );
+  const imgRef = ref(storage, `productImg/${Date.now()}-${req.file.originalname}`);
 
   await uploadBytes(imgRef, req.file.buffer);
 

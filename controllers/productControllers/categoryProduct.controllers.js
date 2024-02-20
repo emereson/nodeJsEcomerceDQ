@@ -3,6 +3,8 @@ import { CategoryProduct } from '../../models/productModels/categoryProduct.mode
 import { Product } from '../../models/productModels/product.model.js';
 import { ProductExtra } from '../../models/productModels/productExtra.model.js';
 import { ProductOption } from '../../models/productModels/productOption.model.js';
+import { ProductDrink } from '../../models/productModels/productDrink.model.js';
+import { ProductPizza } from '../../models/productModels/productPizza.model.js';
 
 export const findAll = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -12,7 +14,7 @@ export const findAll = catchAsync(async (req, res) => {
     include: [
       {
         model: Product,
-        include: [ProductExtra, ProductOption],
+        include: [ProductExtra, ProductOption, ProductDrink, ProductPizza],
       },
     ],
   });

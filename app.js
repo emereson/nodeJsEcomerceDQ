@@ -23,6 +23,8 @@ import { categoryProductRouter } from './routes/productRoutes/categoryProduct.ro
 import { productRouter } from './routes/productRoutes/product.routes.js';
 import { productOptionRouter } from './routes/productRoutes/productOption.routes.js';
 import { productExtraRouter } from './routes/productRoutes/productExtra.routes.js';
+import { productDrinkRouter } from './routes/productRoutes/productDrink.routes.js';
+import { productPizzaRouter } from './routes/productRoutes/productPizza.routes.js';
 
 //delivery
 import { deliveryRouter } from './routes/delivery.routes.js';
@@ -79,6 +81,8 @@ app.use('/api/v1/category-product', categoryProductRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/product-option', productOptionRouter);
 app.use('/api/v1/product-extra', productExtraRouter);
+app.use('/api/v1/product-drink', productDrinkRouter);
+app.use('/api/v1/product-pizza', productPizzaRouter);
 //delivery
 app.use('/api/v1/delivery', deliveryRouter);
 //izipay

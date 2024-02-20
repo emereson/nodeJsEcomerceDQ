@@ -17,12 +17,7 @@ transporter.verify((error, success) => {
   }
 });
 
-export const sendConfirmationEmail = (
-  products,
-  dataClient,
-  delivery,
-  totalPrice
-) => {
+export const sendConfirmationEmail = (products, dataClient, delivery, totalPrice) => {
   const currentDate = new Date();
 
   const options = {
@@ -36,9 +31,7 @@ export const sendConfirmationEmail = (
 
   const linkImg = process.env.LOGO_URL;
 
-  const formattedDate = new Intl.DateTimeFormat('es-PE', options).format(
-    currentDate
-  );
+  const formattedDate = new Intl.DateTimeFormat('es-PE', options).format(currentDate);
 
   const emailBody = `
     <div style=" max-width: 600px; margin: 0 auto; padding:32px 16px; ">
@@ -158,13 +151,11 @@ export const sendConfirmationEmail = (
                     <li key=${index}
                         style="display: flex; gap: 0.5em; padding: 0; margin: 0; text-decoration: none ; list-style: none;">
                         <p style="margin: 0;"> ${product.counter}</p>
-                        <p style="margin: 0;  padding:0 0.5em">${
-                          product.dataProduct.name
-                        }  ${
+                        <p style="margin: 0;  padding:0 0.5em">${product.dataProduct.name}  ${
                             product.selectOption.name
-                          }, ${product.selectExtra.map(
-                            (extra) => extra.name
-                          )}</p>
+                          },  ${product.selectPizza?.map((pizza) => pizza.name)},
+                          ${product?.selectDrink ? `bebida:${product?.selectDrink.name}` : null},
+                           ${product.selectExtra?.map((extra) => extra.name)}</p>
                     </li>
                     `
                       )

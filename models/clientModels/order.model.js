@@ -21,7 +21,15 @@ const Order = db.define('order', {
   },
   extras: {
     type: DataTypes.JSON,
-    allowNull: false,
+    allowNull: true,
+  },
+  pizzas: {
+    type: DataTypes.JSON,
+    allowNull: true,
+  },
+  drink: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
 
   numberOrder: {

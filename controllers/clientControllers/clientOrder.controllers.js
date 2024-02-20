@@ -96,8 +96,10 @@ export const create = catchAsync(async (userId, dataPay) => {
     await Order.create({
       clientOrderId: clientOrder.id,
       name: product.dataProduct.name,
-      option: `${product.selectOption.name} ${product.selectOption.size}`,
+      option: `${product.selectOption?.name} ${product.selectOption.size}`,
       extras: product.selectExtra,
+      pizzas: product.selectPizza,
+      drink: product.selectDrink?.name || null,
       numberOrder: product.counter,
       unitPrice: product.price,
       totalPrice: product.totalPrice,
