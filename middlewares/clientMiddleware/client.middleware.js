@@ -18,7 +18,6 @@ export const validExistClient = catchAsync(async (req, res, next) => {
         include: [Order],
       },
     ],
-    order: [[ClientOrder, 'createdAt', 'DESC']],
   });
 
   if (!client) {
