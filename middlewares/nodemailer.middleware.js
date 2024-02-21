@@ -154,7 +154,7 @@ export const sendConfirmationEmail = (products, dataClient, delivery, totalPrice
                         <p style="margin: 0;  padding:0 0.5em">${product.dataProduct.name}  ${
                             product.selectOption.name
                           },  ${product.selectPizza?.map((pizza) => pizza.name)},
-                          ${product?.selectDrink ? `bebida:${product?.selectDrink.name}` : null},
+                          ${product?.selectDrink ? `bebida:${product?.selectDrink.name}` : ''},
                            ${product.selectExtra?.map((extra) => extra.name)}</p>
                     </li>
                     `
