@@ -199,3 +199,20 @@ export const sendConfirmationEmail = (products, dataClient, delivery, totalPrice
     }
   });
 };
+
+export const sendEmailLinkRecoverPassword = (email, link) => {
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: 'Recupera tu contraseña',
+    html: `Para recuperar tu contraseña, haz clic en el siguiente enlace: <a href="${link}">${link}</a>`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error al enviar el correo electrónico: ', error);
+    } else {
+      console.log(`Correo electrónico enviado a: ${email}`);
+    }
+  });
+};

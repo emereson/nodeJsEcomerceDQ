@@ -47,6 +47,10 @@ const Client = db.define('client', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  codeRecoverPassword: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   status: {
     type: DataTypes.ENUM('active', 'disabled'),
     allowNull: false,

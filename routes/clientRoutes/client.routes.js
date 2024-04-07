@@ -9,14 +9,12 @@ const router = express.Router();
 
 router.post('/login', clientController.login);
 router.post('/signup', clientController.signup);
+router.post('/link-password', clientController.linkRecoverPassword);
+router.post('/:id/code/:code', clientController.updatePassword);
+
 router.get('/:id', clientMiddleware.validExistClient, clientController.findOne);
 router.use(clientAuthMiddleware.protect);
 
-router.patch(
-  '/update-password',
-  clientMiddleware.validExistClient,
-  clientController.updatePassword
-);
 router.patch(
   '/update-img/:id',
   upload.single('clientImg'),

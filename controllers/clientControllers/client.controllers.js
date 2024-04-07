@@ -5,6 +5,8 @@ import { generateJWT } from '../../utils/jwt.js';
 import { AppError } from '../../utils/AppError.js'; // Asegúrate de importar AppError si no lo has hecho
 import { storage } from '../../utils/firebase.js';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { sendEmailLinkRecoverPassword } from '../../middlewares/nodemailer.middleware.js';
+import { v4 as uuidv4 } from 'uuid';
 
 export const findAll = catchAsync(async (req, res) => {
   const clients = await Client.findAll({
@@ -28,8 +30,7 @@ export const findOne = catchAsync(async (req, res) => {
 });
 
 export const signup = catchAsync(async (req, res) => {
-  const { name, lastName, dni, email, date, phoneNumber, address, password } =
-    req.body;
+  const { name, lastName, dni, email, date, phoneNumber, address, password } = req.body;
 
   const salt = await bcrypt.genSalt(12);
   const encryptedPassword = await bcrypt.hash(password, salt);
@@ -42,6 +43,7 @@ export const signup = catchAsync(async (req, res) => {
     phoneNumber,
     date,
     address,
+    codeRecoverPassword: '0',
     password: encryptedPassword,
   });
 
@@ -101,47 +103,56 @@ export const update = catchAsync(async (req, res) => {
   });
 });
 
-// update password
-export const updatePassword = catchAsync(async (req, res) => {
-  const { client } = req;
-  const { currentPassword, newPassword } = req.body;
+export const linkRecoverPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
 
-  // Verificar la contraseña actual del usuario
-  const isPasswordCorrect = await bcrypt.compare(
-    currentPassword,
-    client.password
-  );
+  const code = uuidv4();
 
-  if (!isPasswordCorrect) {
-    return res.status(401).json({
-      status: 'error',
-      message: 'La contraseña actual es incorrecta.',
-    });
+  const client = await Client.findOne({ where: { email } });
+
+  if (!client) {
+    return next(new AppError(`El correo es no se encuentra registrado`, 404));
   }
 
-  // Generar un nuevo hash para la nueva contraseña
-  const salt = await bcrypt.genSalt(12);
-  const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+  await client.update({ codeRecoverPassword: code }, { where: { clientId: client.id } });
 
-  // Actualizar la contraseña en la base de datos
+  const link = `http://localhost:5174/#/update-password/client/${client.id}/codeRecoverPassword/${code}`;
+
+  sendEmailLinkRecoverPassword(client.email, link);
+
+  // Responde con el estado 200 y un mensaje de éxito junto con los datos del cliente
+  return res.status(200).json({
+    status: 'success',
+    message: 'link Password send email successfully.',
+    client,
+  });
+});
+
+export const updatePassword = catchAsync(async (req, res, next) => {
+  const { id, code } = req.params;
+  const { newPassword } = req.body;
+
+  const client = await Client.findOne({ where: { id, codeRecoverPassword: code } });
+  const salt = await bcrypt.genSalt(12);
+  const encryptedPassword = await bcrypt.hash(newPassword, salt);
+
+  if (!client) {
+    return next(new AppError(`El Link es invalido`, 404));
+  }
   await client.update({
-    password: hashedNewPassword,
+    password: encryptedPassword,
   });
 
   return res.status(200).json({
     status: 'success',
-    message: 'Password updated successfully.',
-    client,
+    message: 'client password update has been updated',
   });
 });
 
 export const updateImg = catchAsync(async (req, res) => {
   const { client } = req;
 
-  const imgRef = ref(
-    storage,
-    `clientImg/${Date.now()}-${req.file.originalname}`
-  );
+  const imgRef = ref(storage, `clientImg/${Date.now()}-${req.file.originalname}`);
 
   await uploadBytes(imgRef, req.file.buffer);
 

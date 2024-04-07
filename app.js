@@ -31,6 +31,7 @@ import { deliveryRouter } from './routes/delivery.routes.js';
 
 //izipay
 import { iziPayRouter } from './routes/iziPay.routes.js';
+import { globalErrorHandler } from './controllers/error.controller.js';
 
 const app = express();
 
@@ -99,5 +100,7 @@ app.use((err, req, res, next) => {
     next(err);
   }
 });
+
+app.use(globalErrorHandler);
 
 export { app, server };
