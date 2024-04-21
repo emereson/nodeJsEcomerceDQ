@@ -56,13 +56,14 @@ export const create = catchAsync(async (req, res) => {
 
 export const update = catchAsync(async (req, res) => {
   const { product } = req;
-  const { name, description, label, labelColor } = req.body;
+  const { name, description, label, labelColor, viewText } = req.body;
 
   await product.update({
     name,
     description,
     label,
     labelColor,
+    viewText,
   });
 
   return res.status(200).json({

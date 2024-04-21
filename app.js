@@ -33,6 +33,9 @@ import { deliveryRouter } from './routes/delivery.routes.js';
 import { iziPayRouter } from './routes/iziPay.routes.js';
 import { globalErrorHandler } from './controllers/error.controller.js';
 
+//openingHours
+import { openingHoursRouter } from './routes/openingHoures.routes.js';
+
 const app = express();
 
 app.set('trust proxy', 1);
@@ -52,6 +55,7 @@ const io = new SocketServer(server, {
   path: '/socket.io',
   cors: {
     origin: 'https://admin.donquezo.com',
+    origin: 'http://localhost:5174/',
   },
 });
 
@@ -88,6 +92,8 @@ app.use('/api/v1/product-pizza', productPizzaRouter);
 app.use('/api/v1/delivery', deliveryRouter);
 //izipay
 app.use('/api/v1/izipay', iziPayRouter);
+//openingHours
+app.use('/api/v1/openingHours', openingHoursRouter);
 
 app.all('*', (req, res, next) => {
   return next(new AppError(`Can't find ${req.originalUrl} on this server! 💀`, 404));

@@ -37,6 +37,12 @@ const Product = db.define('product', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  viewText: {
+    type: DataTypes.ENUM('active', 'disable'),
+    allowNull: false,
+    defaultValue: 'active',
+    values: ['active', 'disable'],
+  },
 });
 
 export { Product };
