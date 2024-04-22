@@ -17,6 +17,8 @@ transporter.verify((error, success) => {
   }
 });
 
+const linkImg = process.env.LOGO_URL;
+
 export const sendConfirmationEmail = (products, dataClient, delivery, totalPrice) => {
   const currentDate = new Date();
 
@@ -28,8 +30,6 @@ export const sendConfirmationEmail = (products, dataClient, delivery, totalPrice
     minute: '2-digit',
     hour12: false,
   };
-
-  const linkImg = process.env.LOGO_URL;
 
   const formattedDate = new Intl.DateTimeFormat('es-PE', options).format(currentDate);
 
