@@ -205,7 +205,13 @@ export const sendEmailLinkRecoverPassword = (email, link) => {
     from: process.env.EMAIL,
     to: email,
     subject: 'Recupera tu contraseña',
-    html: `Para recuperar tu contraseña, haz clic en el siguiente enlace: <a href="${link}">${link}</a>`,
+    html: `
+    <div style="text-align: center;">
+      <img src="${linkImg}" alt="" style="width:200px; height: 100px; margin:auto; display: block;">
+      <p>Para recuperar tu contraseña haga click en el boton:</p>
+      <a href="${link}" style="display: inline-block; background-color: #f1192f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Recupere su contraseña</a>
+    </div>
+  `,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

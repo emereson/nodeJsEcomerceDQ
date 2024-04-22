@@ -116,7 +116,7 @@ export const linkRecoverPassword = catchAsync(async (req, res, next) => {
 
   await client.update({ codeRecoverPassword: code }, { where: { clientId: client.id } });
 
-  const link = `http://localhost:5174/#/update-password/client/${client.id}/codeRecoverPassword/${code}`;
+  const link = `https://shop.donquezo.com/#/update-password/client/${client.id}/codeRecoverPassword/${code}`;
 
   sendEmailLinkRecoverPassword(client.email, link);
 
